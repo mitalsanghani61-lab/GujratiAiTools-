@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gujarati AI Tools</title>
+  <meta name="description" content="ગુજરાતી AI Tools - ગુજરાતી લખાણ, અનુવાદ, સારાંશ અને AI સહાયક માટેનું સરળ પ્લેટફોર્મ">
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,"Noto Sans Gujarati","Nirmala UI",sans-serif;
+      background:linear-gradient(135deg,#f8fafc,#eef2ff);color:#172033;
+    }
+    header{
+      background:linear-gradient(135deg,#5b21b6,#7c3aed,#2563eb);color:white;
+      padding:42px 20px;text-align:center;
+    }
+    header h1{margin:0 0 10px;font-size:clamp(30px,6vw,52px)}
+    header p{margin:0;opacity:.92;font-size:18px}
+    .container{max-width:1100px;margin:0 auto;padding:28px 16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{
+      background:white;border-radius:18px;padding:22px;box-shadow:0 8px 28px rgba(15,23,42,.08);
+      border:1px solid #e5e7eb;transition:.2s;
+    }
+    .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(15,23,42,.12)}
+    .icon{font-size:34px}
+    .card h2{font-size:21px;margin:12px 0 7px}
+    .card p{color:#64748b;line-height:1.6}
+    button{
+      border:0;border-radius:12px;padding:12px 18px;background:#6d28d9;color:white;
+      font-size:16px;cursor:pointer;font-weight:600;
+    }
+    button:hover{background:#5b21b6}
+    .tool{
+      margin-top:25px;background:white;padding:24px;border-radius:18px;
+      box-shadow:0 8px 28px rgba(15,23,42,.08)
+    }
+    textarea{
+      width:100%;min-height:150px;border:1px solid #cbd5e1;border-radius:12px;
+      padding:14px;font-size:16px;resize:vertical;font-family:inherit;outline:none;
+    }
+    textarea:focus{border-color:#7c3aed;box-shadow:0 0 0 3px #ede9fe}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    #output{white-space:pre-wrap;background:#f8fafc;border-radius:12px;padding:16px;margin-top:15px;min-height:70px}
+    footer{text-align:center;color:#64748b;padding:35px 15px}
+    .note{font-size:14px;color:#64748b;margin-top:10px}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 Gujarati AI Tools</h1>
+  <p>ગુજરાતી ભાષા માટે સરળ અને ઉપયોગી AI Tools</p>
+</header>
+
+<main class="container">
+  <section class="grid">
+    <article class="card">
+      <div class="icon">✍️</div>
+      <h2>લેખ / નિબંધ</h2>
+      <p>વિષય આપો અને ગુજરાતી લેખ અથવા નિબંધ માટે AI prompt તૈયાર કરો.</p>
+      <button onclick="selectTool('લેખ / નિબંધ')">શરૂ કરો</button>
+    </article>
+
+    <article class="card">
+      <div class="icon">🌐</div>
+      <h2>ગુજરાતી ↔ English</h2>
+      <p>ગુજરાતી અને English અનુવાદ માટે prompt તૈયાર કરો.</p>
+      <button onclick="selectTool('અનુવાદ')">શરૂ કરો</button>
+    </article>
+
+    <article class="card">
+      <div class="icon">📝</div>
+      <h2>સારાંશ</h2>
+      <p>મોટા લખાણનો ટૂંકો અને સરળ સારાંશ બનાવવા prompt તૈયાર કરો.</p>
+      <button onclick="selectTool('સારાંશ')">શરૂ કરો</button>
+    </article>
+
+    <article class="card">
+      <div class="icon">📱</div>
+      <h2>Social Caption</h2>
+      <p>Instagram, Facebook અને WhatsApp માટે ગુજરાતી captions બનાવો.</p>
+      <button onclick="selectTool('Social Caption')">શરૂ કરો</button>
+    </article>
+  </section>
+
+  <section class="tool" id="toolBox">
+    <h2>🧰 Gujarati AI Assistant</h2>
+    <p id="toolHint">નીચે લખાણ લખો અને Tool પસંદ કરો.</p>
+    <textarea id="input" placeholder="અહીં તમારું લખાણ અથવા વિષય લખો..."></textarea>
+    <div class="row">
+      <button onclick="generatePrompt()">✨ AI Prompt બનાવો</button>
+      <button onclick="clearAll()" style="background:#475569">સાફ કરો</button>
+      <button onclick="copyOutput()" style="background:#059669">📋 Copy</button>
+    </div>
+    <div id="output">તમારો પરિણામ અહીં દેખાશે.</div>
+    <div class="note">
+      નોંધ: આ frontend demo છે. સાચું AI પરિણામ મેળવવા માટે સુરક્ષિત backend/API જોડવું જરૂરી છે.
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2026 Gujarati AI Tools • ગુજરાતી માટે બનાવેલું ❤️
+</footer>
+
+<script>
+  let selectedTool = "સામાન્ય AI";
+
+  function selectTool(tool){
+    selectedTool = tool;
+    document.getElementById("toolHint").textContent =
+      "પસંદ કરેલું Tool: " + tool + " — હવે તમારો વિષય/લખાણ નીચે આપો.";
+    document.getElementById("input").focus();
+    window.scrollTo({top: document.getElementById("toolBox").offsetTop - 15, behavior:"smooth"});
+  }
+
+  function generatePrompt(){
+    const text = document.getElementById("input").value.trim();
+    const output = document.getElementById("output");
+
+    if(!text){
+      output.textContent = "કૃપા કરીને પહેલા વિષય અથવા લખાણ લખો.";
+      return;
+    }
+
+    const prompts = {
+      "લેખ / નિબંધ":
+        `ગુજરાતીમાં "${text}" વિષય પર સરળ ભાષામાં સુંદર લેખ/નિબંધ લખો. યોગ્ય શીર્ષક, પરિચય, મુખ્ય મુદ્દાઓ અને નિષ્કર્ષ આપો.`,
+      "અનુવાદ":
+        `નીચેના લખાણનો અર્થ જાળવીને સ્વાભાવિક અને સરળ અનુવાદ કરો. જરૂરી હોય તો ગુજરાતી અને English બંને versions આપો:\n\n${text}`,
+      "સારાંશ":
+        `નીચેના લખાણનો સરળ ગુજરાતી ભાષામાં ટૂંકો સારાંશ બનાવો. મુખ્ય મુદ્દાઓ bullet pointsમાં પણ આપો:\n\n${text}`,
+      "Social Caption":
+        `વિષય "${text}" માટે 5 આકર્ષક ગુજરાતી social-media captions બનાવો. દરેક caption ટૂંકો, સરળ અને engaging હોવો જોઈએ. યોગ્ય hashtags પણ આપો.`
+    };
+
+    output.textContent = prompts[selectedTool] ||
+      `ગુજરાતીમાં નીચેના વિષય વિશે ઉપયોગી અને સરળ જવાબ આપો:\n\n${text}`;
+  }
+
+  function clearAll(){
+    document.getElementById("input").value = "";
+    document.getElementById("output").textContent = "તમારો પરિણામ અહીં દેખાશે.";
+  }
+
+  async function copyOutput(){
+    const text = document.getElementById("output").textContent;
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("કોપી થઈ ગયું ✅");
+    }catch(e){
+      alert("Copy કરવા માટે browser permission જરૂરી છે.");
+    }
+  }
+</script>
+
+</body>
+</html>
