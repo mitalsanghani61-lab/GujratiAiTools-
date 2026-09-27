@@ -105,7 +105,189 @@
   © 2026 Gujarati AI Tools • ગુજરાતી માટે બનાવેલું ❤️
 </footer>
 
-<script>
+<<script>
+  let selectedTool = "સામાન્ય AI";
+
+  function selectTool(tool){
+    selectedTool = tool;
+
+    document.getElementById("toolHint").textContent =
+      "પસંદ કરેલું Tool: " + tool + " — હવે તમારો વિષય/લખાણ નીચે આપો.";
+
+    document.getElementById("input").focus();
+
+    window.scrollTo({
+      top: document.getElementById("toolBox").offsetTop - 15,
+      behavior: "smooth"
+    });
+  }
+
+  async function generatePrompt(){
+    const text = document.getElementById("input").value.trim();
+    const output = document.getElementById("output");
+
+    if(!text){
+      output.textContent = "કૃપા કરીને પહેલા વિષય અથવા લખાણ લખો.";
+      return;
+    }
+
+    let prompt = "";
+
+    const prompts = {
+      "લેખ / નિબંધ":
+        `ગુજરાતીમાં "${text}" વિષય પર સરળ ભાષામાં સુંદર લેખ/નિબંધ લખો. યોગ્ય શીર્ષક, પરિચય, મુખ્ય મુદ્દાઓ અને નિષ્કર્ષ આપો.`,
+
+      "અનુવાદ":
+        `નીચેના લખાણનો અર્થ જાળવીને સ્વાભાવિક અને સરળ અનુવાદ કરો. જરૂરી હોય તો ગુજરાતી અને English બંને versions આપો:\n\n${text}`,
+
+      "સારાંશ":
+        `નીચેના લખાણનો સરળ ગુજરાતી ભાષામાં ટૂંકો સારાંશ બનાવો. મુખ્ય મુદ્દાઓ bullet pointsમાં પણ આપો:\n\n${text}`,
+
+      "Social Caption":
+        `વિષય "${text}" માટે 5 આકર્ષક ગુજરાતી social-media captions બનાવો. દરેક caption ટૂંકો, સરળ અને engaging હોવો જોઈએ. યોગ્ય hashtags પણ આપો.`
+    };
+
+    prompt = prompts[selectedTool] ||
+      `ગુજરાતીમાં નીચેના વિષય વિશે ઉપયોગી અને સરળ જવાબ આપો:\n\n${text}`;
+
+    output.textContent = "🤖 AI જવાબ તૈયાર કરી રહ્યું છે...";
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: prompt
+        })
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.error || "AI request failed");
+      }
+
+      output.textContent = data.reply || "AI તરફથી જવાબ મળ્યો નથી.";
+
+    } catch(error) {
+      console.error(error);
+
+      output.textContent =
+        "❌ AI સાથે જોડાણમાં સમસ્યા આવી.\n\n" +
+        "થોડીવાર પછી ફરી પ્રયાસ કરો.";
+    }
+  }
+
+  function clearAll(){
+    document.getElementById("input").value = "";
+    document.getElementById("output").textContent =
+      "તમારો પરિણામ અહીં દેખાશે.";
+  }
+
+  async function copyOutput(){
+    const text = document.getElementById("output").textContent;
+
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("કોપી થઈ ગયું ✅");
+    }catch(e){
+      alert("Copy કરવા માટે browser permission જરૂરી છે.");
+    }
+  }
+</<script>
+  let selectedTool = "સામાન્ય AI";
+
+  function selectTool(tool){
+    selectedTool = tool;
+
+    document.getElementById("toolHint").textContent =
+      "પસંદ કરેલું Tool: " + tool + " — હવે તમારો વિષય/લખાણ નીચે આપો.";
+
+    document.getElementById("input").focus();
+
+    window.scrollTo({
+      top: document.getElementById("toolBox").offsetTop - 15,
+      behavior: "smooth"
+    });
+  }
+
+  async function generatePrompt(){
+    const text = document.getElementById("input").value.trim();
+    const output = document.getElementById("output");
+
+    if(!text){
+      output.textContent = "કૃપા કરીને પહેલા વિષય અથવા લખાણ લખો.";
+      return;
+    }
+
+    let prompt = "";
+
+    const prompts = {
+      "લેખ / નિબંધ":
+        `ગુજરાતીમાં "${text}" વિષય પર સરળ ભાષામાં સુંદર લેખ/નિબંધ લખો. યોગ્ય શીર્ષક, પરિચય, મુખ્ય મુદ્દાઓ અને નિષ્કર્ષ આપો.`,
+
+      "અનુવાદ":
+        `નીચેના લખાણનો અર્થ જાળવીને સ્વાભાવિક અને સરળ અનુવાદ કરો. જરૂરી હોય તો ગુજરાતી અને English બંને versions આપો:\n\n${text}`,
+
+      "સારાંશ":
+        `નીચેના લખાણનો સરળ ગુજરાતી ભાષામાં ટૂંકો સારાંશ બનાવો. મુખ્ય મુદ્દાઓ bullet pointsમાં પણ આપો:\n\n${text}`,
+
+      "Social Caption":
+        `વિષય "${text}" માટે 5 આકર્ષક ગુજરાતી social-media captions બનાવો. દરેક caption ટૂંકો, સરળ અને engaging હોવો જોઈએ. યોગ્ય hashtags પણ આપો.`
+    };
+
+    prompt = prompts[selectedTool] ||
+      `ગુજરાતીમાં નીચેના વિષય વિશે ઉપયોગી અને સરળ જવાબ આપો:\n\n${text}`;
+
+    output.textContent = "🤖 AI જવાબ તૈયાર કરી રહ્યું છે...";
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: prompt
+        })
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.error || "AI request failed");
+      }
+
+      output.textContent = data.reply || "AI તરફથી જવાબ મળ્યો નથી.";
+
+    } catch(error) {
+      console.error(error);
+
+      output.textContent =
+        "❌ AI સાથે જોડાણમાં સમસ્યા આવી.\n\n" +
+        "થોડીવાર પછી ફરી પ્રયાસ કરો.";
+    }
+  }
+
+  function clearAll(){
+    document.getElementById("input").value = "";
+    document.getElementById("output").textContent =
+      "તમારો પરિણામ અહીં દેખાશે.";
+  }
+
+  async function copyOutput(){
+    const text = document.getElementById("output").textContent;
+
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("કોપી થઈ ગયું ✅");
+    }catch(e){
+      alert("Copy કરવા માટે browser permission જરૂરી છે.");
+    }
+  }
+</script>>
   let selectedTool = "સામાન્ય AI";
 
   function selectTool(tool){
