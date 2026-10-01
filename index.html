@@ -242,6 +242,8 @@
         style="background:#059669"
       >
         📋 Copy
+      </button>
+
       <button onclick="shareWhatsApp()" style="background:#16a34a">
         💬 WhatsApp
       </button>
@@ -274,38 +276,7 @@
 </footer>
 
 
-function getOutputText() {
-    return document.getElementById("output").textContent;
-  }
-
-  function shareWhatsApp() {
-    window.open(
-      "https://wa.me/?text=" + encodeURIComponent(getOutputText()),
-      "_blank"
-    );
-  }
-
-  async function shareFacebook() {
-    try {
-      await navigator.clipboard.writeText(getOutputText());
-    } catch (e) {}
-    alert("લખાણ કોપી થઈ ગયું ✅ હવે Facebook માં paste કરો.");
-    window.open("https://www.facebook.com/", "_blank");
-  }
-
-  async function shareMore() {
-    const text = getOutputText();
-    if (navigator.share) {
-      try {
-        await navigator.share({ text: text });
-      } catch (e) {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (e) {}
-      alert("લખાણ કોપી થઈ ગયું ✅ હવે Instagram માં paste કરો.");
-    }
-  }
+<script>
 
   let selectedTool = "સામાન્ય AI";
 
@@ -408,9 +379,15 @@ ${text}`;
       }
 
 
-      output.textContent =
-        data.reply ||
-        "AI તરફથી જવાબ મળ્યો નથી.";
+      const clean = (data.reply || "AI તરફથી જવાબ મળ્યો નથી.")
+        .replace(/^\s*[*-]\s+/gm, "• ")
+        .replace(/\*\*/g, "")
+        .replace(/^#{1,6}\s*/gm, "")
+        .replace(/^---+$/gm, "")
+        .replace(/^>\s?/gm, "")
+        .replace(/\*/g, "");
+
+      output.textContent = clean;
 
 
     } catch (error) {
@@ -418,8 +395,8 @@ ${text}`;
       console.error(error);
 
       output.textContent =
-  "❌ AI સાથે જોડાણમાં સમસ્યા આવી.\n\n" +
-  "કારણ: " + error.message;
+        "❌ AI સાથે જોડાણમાં સમસ્યા આવી.\n\n" +
+        "કારણ: " + error.message;
 
     }
 
@@ -436,15 +413,16 @@ ${text}`;
   }
 
 
+  function getOutputText() {
+    return document.getElementById("output").textContent;
+  }
+
+
   async function copyOutput() {
-
-    const text =
-      document.getElementById("output").textContent;
-
 
     try {
 
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(getOutputText());
 
       alert("કોપી થઈ ગયું ✅");
 
@@ -458,9 +436,6 @@ ${text}`;
 
   }
 
-function getOutputText() {
-    return document.getElementById("output").textContent;
-  }
 
   function shareWhatsApp() {
     window.open(
@@ -469,6 +444,7 @@ function getOutputText() {
     );
   }
 
+
   async function shareFacebook() {
     try {
       await navigator.clipboard.writeText(getOutputText());
@@ -476,6 +452,7 @@ function getOutputText() {
     alert("લખાણ કોપી થઈ ગયું ✅ હવે Facebook માં paste કરો.");
     window.open("https://www.facebook.com/", "_blank");
   }
+
 
   async function shareMore() {
     const text = getOutputText();
@@ -490,6 +467,8 @@ function getOutputText() {
       alert("લખાણ કોપી થઈ ગયું ✅ હવે Instagram માં paste કરો.");
     }
   }
+
+</script>
 
 </body>
 </html>
