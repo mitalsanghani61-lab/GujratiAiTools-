@@ -242,6 +242,16 @@
         style="background:#059669"
       >
         📋 Copy
+      <button onclick="shareWhatsApp()" style="background:#16a34a">
+        💬 WhatsApp
+      </button>
+
+      <button onclick="shareFacebook()" style="background:#1877f2">
+        📘 Facebook
+      </button>
+
+      <button onclick="shareMore()" style="background:#db2777">
+        📷 Instagram / વધુ
       </button>
 
     </div>
@@ -264,7 +274,38 @@
 </footer>
 
 
-<script>
+function getOutputText() {
+    return document.getElementById("output").textContent;
+  }
+
+  function shareWhatsApp() {
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(getOutputText()),
+      "_blank"
+    );
+  }
+
+  async function shareFacebook() {
+    try {
+      await navigator.clipboard.writeText(getOutputText());
+    } catch (e) {}
+    alert("લખાણ કોપી થઈ ગયું ✅ હવે Facebook માં paste કરો.");
+    window.open("https://www.facebook.com/", "_blank");
+  }
+
+  async function shareMore() {
+    const text = getOutputText();
+    if (navigator.share) {
+      try {
+        await navigator.share({ text: text });
+      } catch (e) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {}
+      alert("લખાણ કોપી થઈ ગયું ✅ હવે Instagram માં paste કરો.");
+    }
+  }
 
   let selectedTool = "સામાન્ય AI";
 
@@ -417,7 +458,38 @@ ${text}`;
 
   }
 
-</script>
+function getOutputText() {
+    return document.getElementById("output").textContent;
+  }
+
+  function shareWhatsApp() {
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(getOutputText()),
+      "_blank"
+    );
+  }
+
+  async function shareFacebook() {
+    try {
+      await navigator.clipboard.writeText(getOutputText());
+    } catch (e) {}
+    alert("લખાણ કોપી થઈ ગયું ✅ હવે Facebook માં paste કરો.");
+    window.open("https://www.facebook.com/", "_blank");
+  }
+
+  async function shareMore() {
+    const text = getOutputText();
+    if (navigator.share) {
+      try {
+        await navigator.share({ text: text });
+      } catch (e) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {}
+      alert("લખાણ કોપી થઈ ગયું ✅ હવે Instagram માં paste કરો.");
+    }
+  }
 
 </body>
 </html>
